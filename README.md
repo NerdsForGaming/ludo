@@ -15,7 +15,7 @@ A sleek, modern multiplayer Ludo game built with Next.js, Socket.io, and Shadcn 
 
 - **Frontend**: Next.js 16, React 19, TypeScript
 - **UI**: Shadcn UI, Tailwind CSS
-- **Backend**: Socket.io for real-time communication
+- **Backend**: Next.js API Routes with polling for real-time updates
 - **Styling**: CSS-in-JS with Tailwind CSS
 
 ## Getting Started
@@ -79,7 +79,9 @@ A sleek, modern multiplayer Ludo game built with Next.js, Socket.io, and Shadcn 
 
 ```
 src/
-├── app/                    # Next.js app directory
+├── app/
+│   ├── api/game/[roomId]/ # API routes for game logic
+│   └── ...                # Next.js app directory
 ├── components/            # React components
 │   ├── Game.tsx           # Main game component
 │   ├── Lobby.tsx          # Room lobby
@@ -87,7 +89,7 @@ src/
 ├── lib/                   # Utility functions
 │   ├── types.ts           # TypeScript types
 │   ├── ludo-logic.ts      # Game logic
-│   └── socket.ts          # Socket.io client
+│   └── socket.ts          # API client for game communication
 └── styles/                # Global styles
 ```
 
