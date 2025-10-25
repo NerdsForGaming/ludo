@@ -12,9 +12,9 @@ const gameRooms = new Map<string, {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
-  const { roomId } = params;
+  const { roomId } = await params;
 
   if (!gameRooms.has(roomId)) {
     return NextResponse.json({ error: 'Room not found' }, { status: 404 });
@@ -26,9 +26,9 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
-  const { roomId } = params;
+  const { roomId } = await params;
   const body = await request.json();
   const { action, playerName, playerColor, pieceId, diceValue } = body;
 
