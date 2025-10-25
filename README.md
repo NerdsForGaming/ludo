@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ludo Multiplayer Game
+
+A sleek, modern multiplayer Ludo game built with Next.js, Socket.io, and Shadcn UI components.
+
+## Features
+
+- 🎮 **Real-time Multiplayer**: Play with up to 4 players simultaneously
+- 📱 **Mobile Responsive**: Optimized for both desktop and mobile devices
+- 🎨 **Modern UI**: Clean, professional design with Shadcn UI components
+- ⚡ **Real-time Updates**: Live game state synchronization
+- 🎯 **Touch Friendly**: Large touch targets for mobile play
+- 🏠 **Room System**: Create private rooms and invite friends
+
+## Tech Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **UI**: Shadcn UI, Tailwind CSS
+- **Backend**: Socket.io for real-time communication
+- **Styling**: CSS-in-JS with Tailwind CSS
 
 ## Getting Started
 
-First, run the development server:
+### Local Development
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Open your browser** and navigate to `http://localhost:3000`
+
+### Deployment to Vercel
+
+1. **Push to GitHub** (optional, but recommended)
+
+2. **Deploy to Vercel**:
+   ```bash
+   # Install Vercel CLI (if not already installed)
+   npm i -g vercel
+
+   # Deploy
+   vercel --prod
+   ```
+
+3. **Environment Variables** (if needed):
+   Add any environment variables in the Vercel dashboard under Project Settings > Environment Variables.
+
+## How to Play
+
+1. **Create or Join a Room**:
+   - Click "Create New Game" to start a new room
+   - Click "Join Existing Game" and enter a room ID to join friends
+
+2. **Choose Your Color**:
+   - Select your preferred color (Red, Green, Yellow, Blue)
+
+3. **Wait for Players**:
+   - Minimum 2 players required to start
+   - Maximum 4 players per game
+
+4. **Game Rules**:
+   - Roll dice to move your pieces
+   - Get a 6 to move a piece out of home
+   - First to get all 4 pieces to the finish wins!
+   - Landing on another player's piece sends it back home
+
+## Game Controls
+
+- **Roll Dice**: Click the dice button on your turn
+- **Move Pieces**: Click on a piece after rolling to move it
+- **Touch Support**: All controls work on mobile devices
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js app directory
+├── components/            # React components
+│   ├── Game.tsx           # Main game component
+│   ├── Lobby.tsx          # Room lobby
+│   └── GameBoard.tsx      # Game board UI
+├── lib/                   # Utility functions
+│   ├── types.ts           # TypeScript types
+│   ├── ludo-logic.ts      # Game logic
+│   └── socket.ts          # Socket.io client
+└── styles/                # Global styles
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
+MIT License - feel free to use this project for your own purposes.
 
-To learn more about Next.js, take a look at the following resources:
+## Support
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you encounter any issues or have questions, please create an issue on GitHub.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ using Next.js, Socket.io, and Shadcn UI
