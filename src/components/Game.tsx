@@ -19,6 +19,72 @@ export default function Game() {
   const [currentRoom, setCurrentRoom] = useState<GameRoom | null>(null);
   const [currentPlayerId, setCurrentPlayerId] = useState<string>('');
 
+  const handleRoomJoined = (data: unknown) => {
+    const typedData = data as { gameState: GameState; playerId?: string };
+    setCurrentRoom({ id: currentRoom?.id || '', players: typedData.gameState.players, gameState: typedData.gameState, maxPlayers: 4 });
+    setGameState(typedData.gameState);
+    setCurrentPlayerId(typedData.playerId || '');
+    setCurrentView('game');
+  };
+
+  const handlePlayerJoined = (data: unknown) => {
+    const typedData = data as { gameState: GameState };
+    if (currentRoom) {
+      setCurrentRoom(prev => prev ? { ...prev, players: typedData.gameState.players } : null);
+      setGameState(typedData.gameState);
+    }
+  };
+
+  const handlePlayerLeft = (data: unknown) => {
+    const typedData = data as { playerId: string };
+    if (currentRoom) {
+      setCurrentRoom(prev => prev ? { ...prev, players: prev.players.filter(p => p.id !== typedData.playerId) } : null);
+    }
+  };
+
+  const handleGameStarted = (data: unknown) => {
+    const typedData = data as { gameState: GameState };
+    setGameState(typedData.gameState);
+  };
+
+  const handleDiceRolled = (data: unknown) => {
+    const typedData = data as { diceValue: number };
+    setGameState(prev => prev ? { ...prev, diceValue: typedData.diceValue } : null);
+  };
+
+  const handlePieceMoved = (data: unknown) => {
+    const typedData = data as { pieceId: string; newPosition: any };
+    setGameState(prev => {
+      if (!prev) return null;
+      const newState = { ...prev };
+      newState.players = newState.players.map(player => ({
+        ...player,
+        pieces: player.pieces.map(piece =>
+          piece.id === typedData.pieceId
+            ? { ...piece, position: typedData.newPosition }
+            : piece
+        )
+      }));
+      newState.diceValue = 0;
+      return newState;
+    });
+  };
+
+  const handleGameFinished = (data: unknown) => {
+    const typedData = data as { winner: string };
+    setGameState(prev => prev ? { ...prev, winner: typedData.winner as any, status: 'finished' as any } : null);
+  };
+
+  const handleGameUpdated = (data: unknown) => {
+    const typedData = data as { gameState: GameState };
+    setGameState(typedData.gameState);
+  };
+
+  const handleError = (data: unknown) => {
+    const typedData = data as { message: string };
+    alert(typedData.message);
+  };
+
   useEffect(() => {
     socketManager.on('room_joined', handleRoomJoined);
     socketManager.on('player_joined', handlePlayerJoined);
@@ -43,65 +109,6 @@ export default function Game() {
       socketManager.disconnect();
     };
   }, []);
-
-  const handleRoomJoined = (data: any) => {
-    setCurrentRoom({ id: currentRoom?.id || '', players: data.gameState.players, gameState: data.gameState, maxPlayers: 4 });
-    setGameState(data.gameState);
-    setCurrentPlayerId(data.playerId || '');
-    setCurrentView('game');
-  };
-
-  const handlePlayerJoined = (data: any) => {
-    if (currentRoom) {
-      setCurrentRoom(prev => prev ? { ...prev, players: data.gameState.players } : null);
-      setGameState(data.gameState);
-    }
-  };
-
-  const handlePlayerLeft = (data: any) => {
-    if (currentRoom) {
-      setCurrentRoom(prev => prev ? { ...prev, players: prev.players.filter(p => p.id !== data.playerId) } : null);
-    }
-  };
-
-  const handleGameStarted = (data: any) => {
-    setGameState(data.gameState);
-  };
-
-  const handleDiceRolled = (data: any) => {
-    if (gameState) {
-      gameState.diceValue = data.diceValue;
-    }
-  };
-
-  const handlePieceMoved = (data: any) => {
-    if (gameState) {
-      // Update piece position in game state
-      gameState.players.forEach(player => {
-        player.pieces.forEach(piece => {
-          if (piece.id === data.pieceId) {
-            piece.position = data.newPosition;
-          }
-        });
-      });
-      gameState.diceValue = 0;
-    }
-  };
-
-  const handleGameFinished = (data: any) => {
-    if (gameState) {
-      gameState.winner = data.winner;
-      gameState.status = 'finished';
-    }
-  };
-
-  const handleGameUpdated = (data: any) => {
-    setGameState(data.gameState);
-  };
-
-  const handleError = (data: any) => {
-    alert(data.message);
-  };
 
   const leaveGame = () => {
     socketManager.disconnect();

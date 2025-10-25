@@ -33,6 +33,24 @@ const PLAYER_POSITIONS = {
 export default function GameBoard({ gameState, currentPlayerId, roomId }: GameBoardProps) {
   const [selectedPiece, setSelectedPiece] = useState<string | null>(null);
 
+  const handleDiceRolled = (data: unknown) => {
+    const typedData = data as { diceValue: number };
+    // Update is handled by parent component through polling
+    console.log('Dice rolled:', typedData.diceValue);
+  };
+
+  const handlePieceMoved = (data: unknown) => {
+    const typedData = data as { pieceId: string; newPosition: any };
+    // Update is handled by parent component through polling
+    console.log('Piece moved:', typedData.pieceId, 'to', typedData.newPosition);
+  };
+
+  const handleGameFinished = (data: unknown) => {
+    const typedData = data as { winner: string };
+    // Update is handled by parent component through polling
+    console.log('Game finished, winner:', typedData.winner);
+  };
+
   useEffect(() => {
     socketManager.on('dice_rolled', handleDiceRolled);
     socketManager.on('piece_moved', handlePieceMoved);
@@ -44,28 +62,6 @@ export default function GameBoard({ gameState, currentPlayerId, roomId }: GameBo
       socketManager.off('game_finished', handleGameFinished);
     };
   }, []);
-
-  const handleDiceRolled = (data: any) => {
-    // Update game state with dice roll
-    gameState.diceValue = data.diceValue;
-  };
-
-  const handlePieceMoved = (data: any) => {
-    // Update piece position in game state
-    gameState.players.forEach(player => {
-      player.pieces.forEach(piece => {
-        if (piece.id === data.pieceId) {
-          piece.position = data.newPosition;
-        }
-      });
-    });
-    gameState.diceValue = 0;
-  };
-
-  const handleGameFinished = (data: any) => {
-    gameState.winner = data.winner;
-    gameState.status = 'finished';
-  };
 
   const rollDice = async () => {
     if (gameState.diceValue === 0 && gameState.players[gameState.currentPlayerIndex].id === currentPlayerId) {

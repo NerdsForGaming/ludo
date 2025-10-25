@@ -103,7 +103,7 @@ export class LudoGame {
     return Math.floor(Math.random() * 6) + 1;
   }
 
-  static canMovePiece(piece: Piece, diceValue: number, gameState: GameState): boolean {
+  static canMovePiece(piece: Piece, diceValue: number): boolean {
     if (piece.position === 'home') return false;
     if (piece.position === 'finish') return false;
 
@@ -121,7 +121,7 @@ export class LudoGame {
     return false;
   }
 
-  static movePiece(piece: Piece, diceValue: number, gameState: GameState): Piece {
+  static movePiece(piece: Piece, diceValue: number): Piece {
     const newPiece = { ...piece };
 
     if (piece.position === 'start' && diceValue === 6) {

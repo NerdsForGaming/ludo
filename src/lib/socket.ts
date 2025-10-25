@@ -1,20 +1,22 @@
-import { GameState, Player, Piece } from './types';
+import { GameState } from './types';
+
+type EventCallback = (data: unknown) => void;
 
 class GameClient {
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, EventCallback[]> = new Map();
   private pollingInterval: NodeJS.Timeout | null = null;
   private currentRoomId: string | null = null;
   private lastUpdate: number = 0;
 
   // Event subscription
-  on(event: string, callback: Function): void {
+  on(event: string, callback: EventCallback): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
     this.listeners.get(event)!.push(callback);
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: EventCallback): void {
     const callbacks = this.listeners.get(event);
     if (callbacks) {
       const index = callbacks.indexOf(callback);
@@ -24,7 +26,7 @@ class GameClient {
     }
   }
 
-  private emit(event: string, data: any): void {
+  private emit(event: string, data: unknown): void {
     const callbacks = this.listeners.get(event);
     if (callbacks) {
       callbacks.forEach(callback => callback(data));
